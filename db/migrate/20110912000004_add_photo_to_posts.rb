@@ -1,7 +1,7 @@
 class AddPhotoToPosts < ActiveRecord::Migration
   def self.down
-    add_column :posts, :photo_file_name, :string
-    add_column :posts, :photo_content_type, :string
+    add_column :posts, :photo_file_name, :text, :limit => nil
+    add_column :posts, :photo_content_type, :text, :limit => nil
     add_column :posts, :photo_file_size, :integer
   end
 

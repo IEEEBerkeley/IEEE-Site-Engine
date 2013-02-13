@@ -1,10 +1,10 @@
 class CreateDonations < ActiveRecord::Migration
   def change
     create_table :donations do |t|
-      t.string :name
-      t.string :company
+      t.text :name, :limit => nil
+      t.text :company, :limit => nil
       t.integer :amount
-      t.string :description
+      t.text :description, :limit => nil
 
       t.timestamps
     end

@@ -1,9 +1,9 @@
 class CreateEvents < ActiveRecord::Migration
   def self.up
     create_table :events do |t|
-      t.string :title
-      t.string :location
-      t.string :description
+      t.text :title, :limit => nil
+      t.text :location, :limit => nil
+      t.text :description, :limit => nil
       t.datetime :event_start
       t.datetime :event_end
 

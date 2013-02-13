@@ -18,6 +18,8 @@ role :web, "ieee.berkeley.edu"                          # Your HTTP server, Apac
 role :app, "ieee.berkeley.edu"                          # This may be the same as your `Web` server
 role :db,  "ieee.berkeley.edu", :primary => true # This is where Rails migrations will run
 
+default_run_options[:pty] = true
+
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
 
@@ -27,7 +29,7 @@ role :db,  "ieee.berkeley.edu", :primary => true # This is where Rails migration
 # If you are using Passenger mod_rails uncomment this:
 namespace :deploy do
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "source /etc/thin/set-secret-keys.sh"
-    run "#{try_sudo} -E thin restart -C /etc/thin/ieee-main.yml"
+    run "cd /srv/ieee-main/current && source /etc/thin/set-secret-keys.sh && bundle exec thin restart -C /etc/thin/ieee-main.yml"
+    run "#{sudo} /etc/init.d/nginx restart"
   end
 end
