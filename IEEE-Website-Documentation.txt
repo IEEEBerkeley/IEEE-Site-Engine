@@ -1,0 +1,79 @@
+----------IEEE WEBSITE DOCUMENTATION----------
+
+Table of Contents:
+1) Setting up your work station
+2) Developing with Git
+3) Deploying to Production
+
+For Rails information, see README.md in this folder. It contains useful information about the rails console, dbconsole, rails debugger, etc.
+
+
+----------SETTING UP YOUR WORK STATION----------
+
+1) Download and install ruby, rails, bundler, and git. Alternatively, you could try to use RailsInstaller which downloads and installs all those things plus some other stuff. If you're using Windows, I highly recommend you also install the git bash tool, or "Git for Windows". Also, make sure you add ruby to your command path (you can check this by going to the command line and typing 'irb' which opens the interactive ruby interpreter. Type 'exit' to exit).
+
+2) If you don't have a github.com account, make one. Then, go to our main repository at https://github.com/IEEEBerkeley/IEEE-Site-Engine and click the "Fork" button near the top right (The new repository is https://github.com/IEEEBerkeley/blue_raspberry). Once this is done, go back to your profile and there you should have your own copy of the repo, titled YOURGITHUB/IEEE-Site-Engine. Your fork of the repo is what we will refer to as "remote" or "origin", while the original IEEEBerkeley one is called "upstream".
+
+3) Generate an SSH Key and add it to your Github using the instructions on this page: https://help.github.com/articles/generating-ssh-keys
+
+4) In your command line (or git bash tool, for Windows users) navigate to the directory that you want to work in using the "cd FOLDER-NAME" command. Then, go to the github page of your remote repository and copy the HTTP URL that is displayed on that page (It should look something like https://github.com/YOURGITHUB/IEEE-Site-Engine.git). Then, in the command line, enter "git clone COPIED-URL".
+
+5) Once the repository is finished cloning, you should have copies of all of our website stuff on your own machine! We will refer to this as the "local" or "master" repository. Now, cd into the main folder of the repo you just cloned and add an "upstream" repository by running "git remote add upstream https://github.com/IEEEBerkeley/IEEE-Site-Engine".
+
+6) While still in the main folder of your repo, enter "rails --version" to make sure Rails is installed correctly. Then, enter "bundle install". This should install all of the ruby gems required by our app, which are described in the Gemfile in the home folder (a Ruby gem is equivalent to a Java JAR or a Python egg, which is a package or collection of classes used to add certain functionality to a program). If you encounter problems, try "bundle install --without production".
+
+7) After your gems finish installing, while still in the main folder, enter "rails server" or "rails s". This will start up a Ruby on Rails webserver right on your own machine! Wait for the server to finish booting, which can take up to a minute on some computers (you'll know it's done when it prints 3 timestamped lines). Then, open your favorite web browser and type http://localhost:3000/ in the URL bar. It might take a while the first time, but you will see a local copy of our website displayed in your browser. Awesome! Also, in the command line window, you can see all the HTTP requests being sent and received, such as GET and POST. When you're done, shut down the server with Ctrl-C.
+
+8) If you're really having trouble getting all this to work (especially if you're on Windows), and you've already exhausted online resources such as google and stackoverflow.com then as a last resort you may consider installing the saasbook Virtual Machine from http://beta.saasbook.info/bookware-vm-instructions under "Downloading and Installing the Courseware". It's an Ubuntu VM already set up with Rails, designed for CS169. If you use it you can probably start from step 2.
+
+
+----------DEVELOPING WITH GIT----------
+
+1) Whenever you begin developing, make sure your local repository is up-to-date:
+
+cd IEEE-Site-Engine               // change directory
+git pull origin master            // pull your own changes to this machine
+git pull upstream master          // pull everyone's changes
+
+2) If you're starting work on a new feature, create a branch and then checkout that branch:
+
+git branch *new-branch-name*      // iff making new branch
+git checkout *new-branch-name*    // e.g. *new-branch-name* = new-officers-page
+
+If you're resuming work on a feature you haven't yet finished, then only run the checkout command.
+
+3) Write your code. Whenever you finish a working chunk, commit it. Good practice is to commit early and often, but try to only commit code that works.
+
+git status                        // see what you've changed
+git add *filename*                // add modified files you want to commit
+git status                        // make sure everything is correct
+git commit -m "your message"      // IMPORTANT: write a descriptive commit message
+
+4) When you're done working on your feature (probably after several commits), it's time to rebase and merge your branch back into your master branch:
+
+git checkout master               // check out your master branch
+git pull --rebase upstream master // just in case someone else pushed code
+git rebase *new-branch-name*      // http://git-scm.com/book/en/Git-Branching-Rebasing   
+git push origin master            // push your commits to your remote repo
+
+5) Finally, if you think that your changes are ready to go live on our website, go to https://github.com/IEEEBerkeley/IEEE-Site-Engine and click the button that says "Pull Request". Your changes will await approval by the Website Director.
+
+If you have access to the IEEEBerkeley group, then instead you can simply do:
+git push upstream master
+
+6) Occasionally while developing you may encounter merge conflicts. If the conflicts are with another developer's code that you don't fully understand, it is important to get in touch when resolving the conflict to make sure you don't mess up each other's code. For basic explanations on branching, merging, and conflict resolution:
+http://git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging
+
+7) If and only if you are simply making a small one- or two-line change, then there's no need to make a new branch. Skip step 2, and instead of step 4 simply pull and then do a "git push origin master"
+
+
+----------DEPLOYING TO PRODUCTION----------
+
+Make sure you are a user that has access to the deployer user on ieee.berkeley.edu. If not, talk to the website director to have him add you to the authorized_keys file on that user.
+
+Go to your personal copy of the rails site. Make sure you are up-to-date by running bundle install just to be safe. When you are ready to derploy, run `bundle exec cap deploy`. Wait for it to finish. If there are a couple of red lines, don't be too concerned. Read through them. If they are about assets pipeline or something like that, then just make sure the website looks correctly once it finishes. If there are any stack traces, then read through them and see what happened. Last resort, c+p it into an email to ieee-website@lists.berkeley.edu
+
+For the curious, here is how deployments work:
+We are using capistrano, an ssh management tool. You can see its configs in Capfile and config/deploy.rb. Mostly the latter. It will ssh in to the deployer user and fork the repo into /tmp. It will then copy that folder into a new folder in /srv/ieee-main/releases. All the folders in there are labeled by date and a unique number to identify the release. The newest release is symlinked to /srv/ieee-main/current. All the shared resources that don't need to be rewritten every release are in /srv/ieee-main/shared and are symlinked by capistrano on deployment. The stripe keys are in a file at /etc/thin/set-secret-keys.sh and they are sourced in before thin is restarted. The specific commands for the restart are in config/deploy.rb. Only other important thing to note is that the file in the thin restart line is the thin config file, which tells how many servers and all that to create. Right now we have 3 processes and nginx load-balances between them.
+
+That brings up the last topic, nginx. We use this to do magic SSL verification and load blanacing (to a minor degree -- speed isn't a huge issue for us). There is a nginx settings file in /etc/nginx/nginx.conf that sets up the SSL certs and the servers, as well as separates out static assets to be served by nginx instead of making ruby do that work. Any request it can't handle on its own gets passed down to the thin processes that do the dirty work.

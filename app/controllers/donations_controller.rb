@@ -27,6 +27,10 @@ class DonationsController < ApplicationController
 
   rescue Stripe::CardError => e
     flash[:error] = "We're sorry, there was an error with your Credit Card"
+    errcode = e.json_body[:error][:code]
+    if errcode == "card_declined"
+      flash[:error] = "We're sorry, your Credit Card was declined"
+    end
     redirect_to new_donation_path
   rescue Stripe::InvalidRequestError => e
     flash[:error] = "We're sorry, there was a problem with your payment request"

@@ -3,7 +3,7 @@ class CreateSignups < ActiveRecord::Migration
     create_table :signups do |t|
       t.integer :user_id
       t.integer :event_id
-      t.string :role
+      t.text :role, :limit => nil
 
       t.timestamps
     end

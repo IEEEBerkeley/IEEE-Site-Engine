@@ -30,7 +30,7 @@ group :test, :development do
 end
 
 group :production do
-  gem 'sqlite3'
+  gem 'pg'
   gem 'therubyracer', "~>0.10.2"
 end
 
