@@ -18,7 +18,7 @@ module Ieee
     config.assets.version = '1.0'
 
     config.assets.paths << "#{Rails.root}/app/assets/"
-
+    config.assets.precompile += ['jquery.js']
     # Change the path that assets are served from
     #config.assets.prefix = "/assets"
 
