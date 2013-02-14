@@ -20,7 +20,7 @@ For Rails information, see README.md in this folder. It contains useful informat
 
 5) Once the repository is finished cloning, you should have copies of all of our website stuff on your own machine! We will refer to this as the "local" or "master" repository. Now, cd into the main folder of the repo you just cloned and add an "upstream" repository by running "git remote add upstream https://github.com/IEEEBerkeley/IEEE-Site-Engine".
 
-6) While still in the main folder of your repo, enter "rails --version" to make sure Rails is installed correctly. Then, enter "bundle install". This should install all of the ruby gems required by our app, which are described in the Gemfile in the home folder (a Ruby gem is equivalent to a Java JAR or a Python egg, which is a package or collection of classes used to add certain functionality to a program). If you encounter problems, try "bundle install --without production".
+6) While still in the main folder of you repo, enter "bundle install". This should install all of the ruby gems required by our app, which are described in the Gemfile in the home folder (a Ruby gem is equivalent to a Java JAR or a Python egg, which is a package or collection of classes used to add certain functionality to a program). If you encounter problems, try "bundle install --without production". Enter "rails --version" to make sure Rails is installed correctly. Then, enter "rake db:test:prepare" followed by "rake db:migrate" to set up your local database.
 
 7) After your gems finish installing, while still in the main folder, enter "rails server" or "rails s". This will start up a Ruby on Rails webserver right on your own machine! Wait for the server to finish booting, which can take up to a minute on some computers (you'll know it's done when it prints 3 timestamped lines). Then, open your favorite web browser and type http://localhost:3000/ in the URL bar. It might take a while the first time, but you will see a local copy of our website displayed in your browser. Awesome! Also, in the command line window, you can see all the HTTP requests being sent and received, such as GET and POST. When you're done, shut down the server with Ctrl-C.
 
@@ -56,7 +56,7 @@ git pull --rebase upstream master // just in case someone else pushed code
 git rebase *new-branch-name*      // http://git-scm.com/book/en/Git-Branching-Rebasing   
 git push origin master            // push your commits to your remote repo
 
-5) Finally, if you think that your changes are ready to go live on our website, go to https://github.com/IEEEBerkeley/IEEE-Site-Engine and click the button that says "Pull Request". Your changes will await approval by the Website Director.
+5) Finally, if you think that your changes are ready to go live on our website, go to https://github.com/IEEEBerkeley/IEEE-Site-Engine and click the button that says "Pull Request". Your changes will await approval by the Website Director. Following this, do NOT rebase.
 
 If you have access to the IEEEBerkeley group, then instead you can simply do:
 git push upstream master
