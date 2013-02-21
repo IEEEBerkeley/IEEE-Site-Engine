@@ -1,0 +1,4 @@
+%h1 Edit Sign Up for #{@e.title}
+%p #{@user.name.capitalize} #{@user.email}
+- @url_path = events_signups_update_path(@signup.id)
+= render 'form'

@@ -1,0 +1,16 @@
+if(<%= attended == true %>){
+  $('<%= '.%d-attendance' % @u.id %>').text('Yes');
+  $('<%= '.%d-confirm' % @u.id %>').val('No');
+  $('<%= '.num-attendees' % @u.id %>').text(function(index,old_text){
+    $(this).text(parseInt(old_text)+ 1);
+  });
+
+} else {
+  $('<%= '.%d-attendance' % @u.id %>').text('No');
+  $('<%= '.%d-confirm' % @u.id %>').val('Yes');
+  $('<%= '.num-attendees' % @u.id %>').text(function(index,old_text){
+    var decreased_count = parseInt(old_text) - 1
+    $(this).text(decreased_count > 0 ? decreased_count : 0);
+  });
+}
+

@@ -6,6 +6,7 @@ class Signup < ActiveRecord::Base
   belongs_to  :event
   
   validates_presence_of :role
+  validates :user_id, :uniqueness => {:scope => :event_id}
   
   def init
     self.attended = false unless self.attended

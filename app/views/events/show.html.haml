@@ -8,23 +8,56 @@
     = @e.event_end.strftime("- %l:%M %p")
   .description
     = @e.description
+
 - if current_user
+  - if has_permission
+    .option
+      = link_to "Edit", edit_event_path(@e)
+    .option
+      = link_to "Delete", event_path(@e), :method => "delete"
+
   - if Signup.where(:event_id => @e.id).length > 0
     %h2 Attending
-    - if has_permission
-      %p
-        You can click the email addresses to change the "attended" flag
   - if Signup.exists?
-    - @e.users.each do |u|
-      - s = u.signups.where(:event_id => @e.id).first
-      - if has_permission
-        = link_to u.email, users_mark_path(u, s.id), :method => "post"
-        \- Attended: #{s.attended}
-      - else
-        = link_to u.email, users_mark_path(u, s.id), :method => "post"
-        \- Attended: #{s.attended}
-      %br/
-  .option
-    = link_to "Edit", edit_event_path(@e)
-  .option
-    = link_to "Delete", event_path(@e), :method => "delete"
+    - s = Signup.where(:event_id => @e.id)
+    - num_attendees = s.where(:attended => true).count()
+    - num_signups = s.count()
+
+    %table
+      %tr
+        %td 
+          %b Summary:
+        %td 
+          %span Signups: #{num_signups}
+        %td
+          %span Attendance: 
+          %span{ :class => 'num-attendees' }#{num_attendees}
+
+    %table
+      - if num_signups > 0
+        %thead
+          - header_arr = ['Name','Email','Attended', 'Role'] 
+          - if has_permission
+            - header_arr << 'Change'
+          - header_arr.each do |w|
+            %th #{w}
+        - @e.users.each do |u|
+          %tr
+            - s = u.signups.where(:event_id => @e.id).first
+            - attended = s.attended ? 'Yes': 'No'
+            - reverse_attendance = s.attended ? 'No' : 'Yes'
+            - data_arr = [u.name.capitalize, u.email, attended , s.role]
+            - data_arr.each do |w|
+              - if w == attended
+                %td{:class => '%d-attendance' % u.id}#{w}
+              - else
+                %td #{w}
+            -if has_permission
+              %td 
+                = button_to reverse_attendance, users_mark_path(u,s.id),:action => "mark", :controller => "signups",:class=>'%d-confirm' % u.id, :remote => true
+    - if Signup.where(:event_id => @e.id, :user_id=> current_user.id).length == 0
+      = link_to "Sign up", events_signups_new_path(@e) 
+    - else
+      = link_to "Update sign up", events_signups_edit_path(@e.id, s.id) 
+
+

@@ -1,11 +1,10 @@
-= form_for @signup, :url => events_signups_new_path,  :html => { :multipart => true } do |f|
+= form_for @signup, :url => @url_path,  :html => { :multipart => true } do |f|
   - if @signup.errors.any?
     - @signup.errors.full_messages.each do |message|
       .message_error
         %p= message
-  %p
-    = f.label :role
-    %br/
-    = f.text_field :role
+  = f.label :role
+  /= f.text_field :role
+  = f.select("role", %w(Setup Cleanup Attending Organizer))
   = f.hidden_field :event_id, :value => @e.id
-  %p.button= f.submit
+  = f.submit
