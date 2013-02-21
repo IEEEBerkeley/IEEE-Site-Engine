@@ -12,7 +12,7 @@ gem 'rake', "~> 0.9.2"
 gem 'googlecalendar'
 gem 'will_paginate'
 gem 'thin'
-
+gem 'jquery-rails-cdn'
 # Gems used only for assets and not required
 # in production environments by default
 group :assets do
