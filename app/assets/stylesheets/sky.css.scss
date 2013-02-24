@@ -60,6 +60,11 @@ textarea, input, select {
   background: #F7F7F7;
 }
 
+input[type="submit"] {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
 textarea {
   width: $main_content_width;
   resize: none;
@@ -274,6 +279,13 @@ blockquote, address {
   padding: 10px;
 }
 
+.button_to, .button_to div {
+  display: inline-block;
+}
+.button_to:hover, .button_to *:hover {
+  cursor:pointer;
+  opacity: 0.9;
+}
 button {
   font-size: 15px;
   line-height: 20px;
@@ -283,11 +295,11 @@ button {
   margin-top: 5px;
   background-color: #E8E8E8;
 }
-
 button:hover {
   background-color: #DFF4FF;
   border: 1px solid #C2E1EF;
   color: #336699;
+  cursor: pointer !important;
 }
 
 button.positive:hover {

@@ -56,7 +56,7 @@ git pull --rebase upstream master // just in case someone else pushed code
 git rebase *new-branch-name*      // http://git-scm.com/book/en/Git-Branching-Rebasing   
 git push origin master            // push your commits to your remote repo
 
-5) Finally, if you think that your changes are ready to go live on our website, go to https://github.com/IEEEBerkeley/IEEE-Site-Engine and click the button that says "Pull Request". Your changes will await approval by the Website Director. Following this, do NOT rebase.
+5) Finally, if you think that your changes are ready to go live on our website, navigate to your repository on Github and click the button that says "Pull Request". Your changes will await approval by the Website Director. Following this, do NOT rebase.
 
 If you have access to the IEEEBerkeley group, then instead you can simply do:
 git push upstream master
@@ -69,9 +69,11 @@ http://git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging
 
 ----------DEPLOYING TO PRODUCTION----------
 
-Make sure you are a user that has access to the deployer user on ieee.berkeley.edu. If not, talk to the website director to have him add you to the authorized_keys file on that user.
+Make sure you are a user that has access to the deployer user on ieee.berkeley.edu. If not, talk to the website director to have him add you to the .ssh/authorized_keys file on that user.
 
-Go to your personal copy of the rails site. Make sure you are up-to-date by running bundle install just to be safe. When you are ready to derploy, run `bundle exec cap deploy`. Wait for it to finish. If there are a couple of red lines, don't be too concerned. Read through them. If they are about assets pipeline or something like that, then just make sure the website looks correctly once it finishes. If there are any stack traces, then read through them and see what happened. Last resort, c+p it into an email to ieee-website@lists.berkeley.edu
+Go to your personal local copy of the rails site. Make sure you are up-to-date by running bundle install just to be safe. When you are ready to derploy, run `bundle exec cap deploy`. Wait for it to finish. If there are a couple of red lines, don't be too concerned. Read through them. If they are about assets pipeline or something like that, then just make sure the website looks correct once it finishes. If there are any stack traces, then read through them and see what happened. Last resort, c+p it into an email to ieee-website@lists.berkeley.edu
+
+If something comes up and you need to get in and can't, ssh into your personal user, and then `sudo su - deployer` to get into the deployer user. To give a user sudo permissions, add them to the wheel group using 'sudo usermod -a -G wheel {username}'
 
 For the curious, here is how deployments work:
 We are using capistrano, an ssh management tool. You can see its configs in Capfile and config/deploy.rb. Mostly the latter. It will ssh in to the deployer user and fork the repo into /tmp. It will then copy that folder into a new folder in /srv/ieee-main/releases. All the folders in there are labeled by date and a unique number to identify the release. The newest release is symlinked to /srv/ieee-main/current. All the shared resources that don't need to be rewritten every release are in /srv/ieee-main/shared and are symlinked by capistrano on deployment. The stripe keys are in a file at /etc/thin/set-secret-keys.sh and they are sourced in before thin is restarted. The specific commands for the restart are in config/deploy.rb. Only other important thing to note is that the file in the thin restart line is the thin config file, which tells how many servers and all that to create. Right now we have 3 processes and nginx load-balances between them.

@@ -60,6 +60,8 @@ Ieee::Application.routes.draw do
       get '/new' => 'signups#new', :as => :new
       post '/new' => 'signups#create', :as => :create
       post '/:id/mark' => 'signups#mark', :as => :mark
+      get'/:id/edit' => 'signups#edit', :as => :edit
+      put '/:id/edit' => 'signups#update', :as => :update
     end
   end
 

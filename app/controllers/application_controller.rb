@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
       redirect_to home_url, :notice => "Permission Denied"
       return false
     end
+    return true
   end
 
   def current_user
