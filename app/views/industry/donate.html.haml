@@ -1,4 +1,14 @@
-%h1 Donations
+%h1 nations
+
+:css
+  #donate:link {
+  border-style: solid;
+  border-width : 1px 4px 4px 1px;
+  text-decoration : none;
+  padding : 2px;
+  border-color : #69f #00f #00f #69f;
+  }
+  #donate:hover { border-color: #ccc; }
 
 %div#industry_nav
   - %w(information sponsors donate).each do |name|
@@ -6,6 +16,5 @@
 
 #donation-info
   %p
-    Thank you for considering donating to IEEE! 
-  %u= link_to 'Please click here to continue', :action => 'new', :controller => 'donations'
-
+    Thank you for considering donating to IEEE! To continue, please click
+    %a{:id => "donate"}= link_to 'HERE', { :controller => 'donations', :action => 'new' }, :id => "donate"
